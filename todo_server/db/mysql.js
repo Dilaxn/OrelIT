@@ -5,7 +5,6 @@ var mysqlParameters = require('../dependencies/dependencies');
 function startDBConnection(){
     try{
         //creating mysql connection pool
-        console.log("111")
         var mysqlConnection = mysql.createPool({
             connectionLimit:mysqlParameters.MYSQLPARAMETERS.connectionLimit,
             host: mysqlParameters.MYSQLPARAMETERS.host,
@@ -14,11 +13,9 @@ function startDBConnection(){
             database: mysqlParameters.MYSQLPARAMETERS.database,
             multipleStatements: true
         });
-        console.log("222")
         return mysqlConnection;
     }
     catch(e){
-        console.log("333")
         console.log(e);
     }
 }
