@@ -48,7 +48,7 @@ const done = props.completed
         });
         if (res.status === "200") {
             console.log("okkk---")
-            setCompleted(!completed);
+            dispatch({type: UPDATE_TASK, payload: newTaskObject});
         } else {
             console.log("something went wrong")
         }

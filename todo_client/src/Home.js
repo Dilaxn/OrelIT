@@ -57,12 +57,16 @@ loadTasks()
         getTasks();
     }, []);
 
-    function handleClick(id) {
+    async function handleClick(id) {
         console.log("Task card clicked!", id);
         const newTasks = taskCollection.tasks.filter((task) => task.id !== id);
-        setTaskCollection({ tasks: newTasks }); // update the task collection state
+        setTaskCollection({tasks: newTasks}); // update the task collection state
         console.log(newTasks);
-        dispatch(deleteTask(id));
+        const res = await axios.delete('http://localhost:5000/api/task/'+ id);
+        if(res.status === "200"){
+            console.log("Successfully deleted")
+            dispatch(deleteTask(id));
+        }
     }
     function handleClick2(index) {
         console.log("Task card 222 clicked!", index);
