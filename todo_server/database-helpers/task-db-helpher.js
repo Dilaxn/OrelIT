@@ -24,7 +24,8 @@ module.exports = (injectedMysqlConnection, injectedHelpers) => {
         _rollback: _rollback,
         _getTaskList: _getTaskList,
         _createTask : _createTask,
-        _updateTask: _updateTask
+        _updateTask: _updateTask,
+        _deleteTask:_deleteTask
     }
 }
 
@@ -139,6 +140,20 @@ function _updateTask(data, dbconn) {
             content = '` + data.content +  `' WHERE id = ` + data.t_id + `;`;
 
         //execute the query
+        dbconn.query(queryString, function (err, result) {
+            if (err) reject(err);
+            resolve(result);
+        });
+    });
+}
+
+//update task
+function _deleteTask(data, dbconn) {
+    console.log(data)
+    //promise returns a result to await.
+    return new Promise((resolve, reject) => {
+        let queryString = `DELETE FROM task WHERE id=${data.t_id}`
+
         dbconn.query(queryString, function (err, result) {
             if (err) reject(err);
             resolve(result);

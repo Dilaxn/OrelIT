@@ -16,7 +16,8 @@ module.exports = (injectedDBHelper, InjectedMessages, injectedHelpers) => {
     return {
         _getTaskList: _getTaskList,
         _createTask: _createTask,
-        _updateTask: _updateTask
+        _updateTask: _updateTask,
+        _deleteTask: _deleteTask
     }
 }
 
@@ -131,4 +132,34 @@ async function _updateTask(req, res) {
     }
 }
 
+//delete a task
+async function _deleteTask(req, res) {
+    //get messages from Message class
+    let messages = new Messages();
+    let conn = await dbHelper._getConnection();
+    try {
+        //get the body data
+        let data = {}
+
+        data.t_id = req.params.t_id
+
+        //store results from db call
+        let result = null;
+        result = await dbHelper._deleteTask(data, conn);
+
+        //null result - no user found
+        if (result.length == 0) {
+            res.status(200).send(messages.fail);
+            return;
+        }
+
+        //send result
+        res.status(200).send(result);
+    } catch (err) {
+        console.log('Error:', err);
+        //error result - user not found
+        res.status(200).send(messages.fail);
+        return;
+    }
+}
 
