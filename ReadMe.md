@@ -18,7 +18,8 @@ This is a simple Todo app built with React, Redux, Node.js, and MySQL. It allows
 12. goto client - cd todo_client
 13. Install dependencies with `npm install`
 14. change base url from Const.js according to your backend
-15. Open `http://localhost:3000` in your browser
+15. then run the client - npm start
+16. Open `http://localhost:3000` in your browser
 
 ## Usage
 
