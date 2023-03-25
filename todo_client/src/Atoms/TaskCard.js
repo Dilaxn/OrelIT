@@ -33,28 +33,38 @@ const done = props.completed
         setEditIndex(props.index);
     }
 
-    function editFinished() {
+    async function editFinished() {
         console.log("Edit clicked for task: ", props.task);
         console.log("Task card clicked!", props.index);
         setEditIndex(-1);
         const newTaskObject = {
-            id:id,
+            id: id,
             content: editedTask,
             completed: completed
         };
+
+        const res = await axios.put('http://localhost:5000/api/task/' + props.id, {
+            content: editedTask
+        });
+        if (res.status === "200") {
+            console.log("okkk---")
+            setCompleted(!completed);
+        } else {
+            console.log("something went wrong")
+        }
         // dispatch(addTask(newTaskObject));
-        dispatch({ type: UPDATE_TASK, payload: newTaskObject });
+        dispatch({type: UPDATE_TASK, payload: newTaskObject});
     }
 
     async function handleComplete() {
         console.log("Edit clicked for task: ", props.task);
         console.log("Task card clicked!", props.index);
-        setCompleted(!completed);
         const res = await axios.put('http://localhost:5000/api/task/'+props.id,{
             completed: !completed
         });
         if(res.status == "200"){
             console.log("okkk---")
+            setCompleted(!completed);
         }
         else
         {
