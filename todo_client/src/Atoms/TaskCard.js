@@ -41,7 +41,7 @@ const done = props.completed
             completed: completed
         };
 
-        const res = await axios.put(`${BASE_URL}/task/${props.id}`, {
+        const res = await axios.put(`${BASE_URL}/task/`+ props.id, {
             content: editedTask
         });
         if (res.status == "200") {
@@ -65,7 +65,7 @@ const done = props.completed
     }
 
     async function handleComplete() {
-        const res = await axios.put(`${BASE_URL}/task/${props.id}`,{
+        const res = await axios.put(`${BASE_URL}/task/`+ props.id,{
             completed: !completed
         });
         if(res.status == "200"){
