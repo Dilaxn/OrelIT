@@ -34,10 +34,9 @@ module.exports = (injectedMysqlConnection, injectedHelpers) => {
 function _getConnection() {
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
-        console.log("1")
         mysqlConn.getConnection(function (err, conn) {
             if (err) {
-                console.log("found")
+
                 reject(err)} // not connected!
 
             resolve(conn);
@@ -102,12 +101,9 @@ function _getTaskList() {
 
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
-        console.log("2")
         let queryString = `SELECT *  FROM task`
-        console.log("3")
         mysqlConn.query(queryString, function (err, result) {
             if (err) {
-                console.log("found2")
                 reject(err)}
 
             resolve(result);
@@ -117,12 +113,9 @@ function _getTaskList() {
 
 //create task
 function _createTask(data, dbconn) {
-    console.log(data)
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
-        console.log("2")
         let queryString  = `INSERT INTO task SET ?`
-        console.log("3")
         dbconn.query(queryString, data, (error, result) => {
             if (error)
                 reject(error)
@@ -133,7 +126,6 @@ function _createTask(data, dbconn) {
 
 //update task
 function _updateTask(data) {
-    console.log(data)
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
         let queryString = `UPDATE task SET 
@@ -150,7 +142,6 @@ function _updateTask(data) {
 
 //update task
 function _deleteTask(data) {
-    console.log(data)
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
         let queryString = `DELETE FROM task WHERE id=${data.t_id}`

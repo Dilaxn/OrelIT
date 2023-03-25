@@ -7,21 +7,62 @@ import Typography from '@mui/material/Typography';
 import {Grid, TextField} from "@mui/material";
 import TaskCard from "./Atoms/TaskCard";
 import data from './MockData/tasks.json';
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import { LOAD_TASKS_SUCCESS, LOAD_TASKS_FAIL } from './actionTypes';
 
-export default function Home() {
+import { connect } from 'react-redux';
+import {
+    addTask,
+    updateTask,
+    deleteTask,
+    completeTask,
+} from './Actions/taskActions';
+import axios from "axios";
+
+const loadAllAddressSuccess = (payload) => ({ type: 'LOAD_TASKS_SUCCESS', payload });
+const loadAllAddressFail = () => ({ type: 'LOAD_ALL_ADDRESS_FAIL' });
+
+export default function Home(props) {
 const [taskCollection,setTaskCollection] = useState(data)
     const [newTask, setNewTask] = useState("");
+    const state = useSelector((state) => state);
+    console.log("store", state);
 
-    // useEffect(() => {
-    //     setTaskCollection(data);
-    // }, []);
+    const dispatch = useDispatch();
+
+const loadTasks = () => async (dispatch) => {
+        try {
+            const res = await axios.get('http://localhost:5000/api/task');
+            dispatch({ type: LOAD_TASKS_SUCCESS, payload: res.data });
+        } catch (e) {
+            console.log('error');
+            dispatch({ type: LOAD_TASKS_FAIL });
+        }
+    };
+
+loadTasks()
+    useEffect(() => {
+        const getTasks = async () => {
+            try {
+                console.log('okkk');
+                const res = await axios.get('http://localhost:5000/api/task');
+                console.log(res.data);
+                dispatch(loadAllAddressSuccess(res.data));
+            } catch (e) {
+                console.log('error');
+                dispatch(loadAllAddressFail());
+            }
+        };
+        getTasks();
+    }, []);
 
     function handleClick(id) {
         console.log("Task card clicked!", id);
         const newTasks = taskCollection.tasks.filter((task) => task.id !== id);
         setTaskCollection({ tasks: newTasks }); // update the task collection state
         console.log(newTasks);
+        dispatch(deleteTask(id));
     }
     function handleClick2(index) {
         console.log("Task card 222 clicked!", index);
@@ -34,12 +75,9 @@ const [taskCollection,setTaskCollection] = useState(data)
     function handleAddTask() {
         const newTaskObject = {
             content: newTask,
-            completed: false
+            completed: 0
         };
-        setTaskCollection(prevState => {
-            return { tasks: [...prevState.tasks, newTaskObject] };
-        });
-        setNewTask("");
+        dispatch(addTask(newTaskObject));
     }
 
     return (
@@ -64,7 +102,7 @@ const [taskCollection,setTaskCollection] = useState(data)
 
                 {/*Here I map the all tasks with reusable component taskCard */}
 
-                {taskCollection &&  taskCollection.tasks.map((task, index) => (
+                {state &&  state.tasks.map((task, index) => (
                     <TaskCard key={task.id} task={task.content} completed={task.completed}  onClick={() => handleClick(task.id)} onClick2={() => handleClick2(task.id)}/>
                 ))}
 
