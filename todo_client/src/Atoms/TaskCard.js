@@ -1,11 +1,8 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {Checkbox, FormControl, FormHelperText, Grid, Input, InputLabel} from "@material-ui/core";
+import {FormControl, Grid, Input, InputLabel} from "@material-ui/core";
 import {useEffect, useState} from "react";
 import IconButton from '@mui/material/IconButton';
 import CheckIcon from '@mui/icons-material/Check';
@@ -73,9 +70,10 @@ const done = props.completed
                         <IconButton onClick={props.onClick}>
                             <DeleteIcon />
                         </IconButton>
-                        <IconButton onClick={handleEditClick}>
+                        {/*cannot update when the task completed*/}
+                        { !completed ?   <IconButton onClick={handleEditClick}>
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> : null}
                     </Grid>
                     <Grid item xs={6}>
                 <Typography gutterBottom variant="h5" component="div" style={{textDecoration: completed ? 'line-through' : 'none'}}>

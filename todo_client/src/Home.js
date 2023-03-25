@@ -2,14 +2,12 @@ import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {FormControl, FormHelperText, Grid, InputLabel, TextField} from "@mui/material";
-import {Input} from "@mui/icons-material";
+import {Grid, TextField} from "@mui/material";
 import TaskCard from "./Atoms/TaskCard";
 import data from './MockData/tasks.json';
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 export default function Home() {
 const [taskCollection,setTaskCollection] = useState(data)
