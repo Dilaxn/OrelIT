@@ -85,6 +85,7 @@ loadTasks()
         if (res.status == "201") {
             console.log("Successfully created!")
             dispatch(addTask(newTaskObject));
+            setNewTask("")
         }
         else {
             console.log("res cre", res)
@@ -121,7 +122,7 @@ loadTasks()
 
             </CardContent>
             <CardActions style={{ justifyContent: 'center', alignItems: 'center', padding:30 }}>
-                <TextField fullWidth style={{ display: 'block' }} id="standard-basic" label="Add todo" variant="standard" onChange={(event) => setNewTask(event.target.value)} />
+                <TextField fullWidth style={{ display: 'block' }} value={newTask} id="standard-basic" label="Add todo" variant="standard" onChange={(event) => setNewTask(event.target.value)} />
                 <Button  style={{ display: 'block', borderRadius: '50%',border:1, borderWidth:1, backgroundColor:"#ec042b", color:"white" }} onClick={handleAddTask} size="large" >+</Button>
 
             </CardActions>
