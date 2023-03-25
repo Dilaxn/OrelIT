@@ -112,15 +112,17 @@ function _getTaskList() {
 }
 
 //create task
-function _createTask(data, dbconn) {
+function _createTask(data) {
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
-        let queryString  = `INSERT INTO task SET ?`
-        dbconn.query(queryString, data, (error, result) => {
-            if (error)
-                reject(error)
-            resolve(result)
-        })
+        let query = `INSERT INTO task SET ?`;
+
+        //execute the query
+        mysqlConn.query(query, data, (error, result) => {
+            if (error) reject(error);
+            resolve(result);
+
+        });
     });
 }
 

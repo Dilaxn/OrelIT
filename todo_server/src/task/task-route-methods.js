@@ -64,7 +64,6 @@ async function _getTaskList(req, res) {
 async function _createTask(req, res) {
     //get messages from Message class
     let messages = new Messages();
-    let conn = await dbHelper._getConnection();
     try {
         //get the body data
         let data = req.body
@@ -81,23 +80,22 @@ async function _createTask(req, res) {
         }
         //store results from db call
         let result = null;
-        result = await dbHelper._createTask(data, conn);
+        result = await dbHelper._createTask(data);
 
         //null result - no user found
         if (result.length == 0) {
-            res.status(200).send(messages.not_found);
+            res.status(404).send(messages.not_found);
             return;
         }
 
-        await dbHelper._commit(conn);
 
         //send result
-        res.status(200).send(result);
+        res.status(201).send(result);
         return
     } catch (err) {
         console.log('Error:', err);
         //error result - user not found
-        res.status(200).send(messages.fail);
+        res.status(500).send(messages.fail);
         return;
     }
 }

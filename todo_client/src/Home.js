@@ -63,7 +63,7 @@ loadTasks()
         setTaskCollection({tasks: newTasks}); // update the task collection state
         console.log(newTasks);
         const res = await axios.delete('http://localhost:5000/api/task/'+ id);
-        if(res.status === "200"){
+        if(res.status == "200"){
             console.log("Successfully deleted")
             dispatch(deleteTask(id));
         }
@@ -76,12 +76,20 @@ loadTasks()
     }
 
     // Function for handle new task
-    function handleAddTask() {
+    async function handleAddTask() {
         const newTaskObject = {
             content: newTask,
             completed: 0
         };
-        dispatch(addTask(newTaskObject));
+        const res = await axios.post('http://localhost:5000/api/task',newTaskObject);
+        if (res.status == "201") {
+            console.log("Successfully created!")
+            dispatch(addTask(newTaskObject));
+        }
+        else {
+            console.log("res cre", res)
+        }
+
     }
 
     return (

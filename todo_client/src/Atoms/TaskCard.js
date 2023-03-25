@@ -46,7 +46,7 @@ const done = props.completed
         const res = await axios.put('http://localhost:5000/api/task/' + props.id, {
             content: editedTask
         });
-        if (res.status === "200") {
+        if (res.status == "200") {
             console.log("okkk---")
             dispatch({type: UPDATE_TASK, payload: newTaskObject});
         } else {
