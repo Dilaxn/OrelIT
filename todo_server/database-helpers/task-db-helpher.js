@@ -128,13 +128,11 @@ function _createTask(data, dbconn) {
 function _updateTask(data) {
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
-        let queryString = `UPDATE task SET 
-            content = '` + data.content +  `' WHERE id = ` + data.t_id + `;`;
 
-        //execute the query
-        mysqlConn.query(queryString, function (err, result) {
-            if (err) reject(err);
+        let query = `UPDATE task SET ? WHERE id ='${data.id}'`;
 
+        mysqlConn.query(query, data, (error, result) => {
+            if (error) return reject(error);
             resolve(result);
         });
     });

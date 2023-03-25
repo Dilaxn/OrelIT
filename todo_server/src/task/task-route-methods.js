@@ -110,7 +110,7 @@ async function _updateTask(req, res) {
         //get the body data
         let data = req.body
 
-        if (data.content === "") {
+        if (data?.content === "" && data?.completed === null ) {
             res.status(400).send(messages.fail);
             return;
         }
@@ -121,7 +121,7 @@ async function _updateTask(req, res) {
             return;
         }
 
-        data.t_id = req.params.t_id
+        data.id = req.params.t_id
 
         //store results from db call
         let result = null;
@@ -187,7 +187,8 @@ async function _deleteTask(req, res) {
 //validate input
 function validateTask(attn) {
     const schema = Joi.object({
-        content: Joi.string().required().label("Content")
+        content: Joi.string().label("Content"),
+        completed: Joi.boolean().allow(0,1).label("IsCompleted?")
     });
 
     return schema.validate(attn);
