@@ -1,0 +1,54 @@
+{
+  "tasks": [
+    {
+      "id": 1,
+      "content": "Complete math homework",
+      "completed": false
+    },
+    {
+      "id": 2,
+      "content": "Call mom",
+      "completed": true
+    },
+    {
+      "id": 3,
+      "content": "Buy groceries",
+      "completed": false
+    },
+    {
+      "id": 4,
+      "content": "Schedule dentist appointment",
+      "completed": false
+    },
+    {
+      "id": 5,
+      "content": "Submit work report",
+      "completed": false
+    },
+    {
+      "id": 6,
+      "content": "Pick up dry cleaning",
+      "completed": false
+    },
+    {
+      "id": 7,
+      "content": "Practice guitar",
+      "completed": false
+    },
+    {
+      "id": 8,
+      "content": "Attend meeting",
+      "completed": false
+    },
+    {
+      "id": 9,
+      "content": "Run 5 miles",
+      "completed": false
+    },
+    {
+      "id": 10,
+      "content": "Read book",
+      "completed": false
+    }
+  ]
+}
