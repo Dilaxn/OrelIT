@@ -8,16 +8,24 @@ import IconButton from '@mui/material/IconButton';
 import CheckIcon from '@mui/icons-material/Check';
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import {addTask} from "../Actions/taskActions";
+import {useDispatch} from "react-redux";
+import {LOAD_TASKS_SUCCESS, UPDATE_TASK} from "../actionTypes";
+import axios from "axios";
 
+const updateSuccess = (payload) => ({ type: 'UPDATE_TASK', payload });
 
 export default function TaskCard(props) {
+    const dispatch = useDispatch();
 
+    const [editedTask, setEditedTask] = useState(props.task);
     useEffect(() => {
        setCompleted(props.completed)
     }, []);
 const done = props.completed
     const [editIndex, setEditIndex] = useState(-1);
     const [completed, setCompleted] = useState(props.completed);
+    const [id, setId] = useState(props.id);
 
     function handleEditClick() {
         console.log("Edit clicked for task: ", props.task);
@@ -29,13 +37,37 @@ const done = props.completed
         console.log("Edit clicked for task: ", props.task);
         console.log("Task card clicked!", props.index);
         setEditIndex(-1);
+        const newTaskObject = {
+            id:id,
+            content: editedTask,
+            completed: completed
+        };
+        // dispatch(addTask(newTaskObject));
+        dispatch({ type: UPDATE_TASK, payload: newTaskObject });
     }
 
-    function handleComplete() {
+    async function handleComplete() {
         console.log("Edit clicked for task: ", props.task);
         console.log("Task card clicked!", props.index);
         setCompleted(!completed);
+        const res = await axios.put('http://localhost:5000/api/task/'+props.id,{
+            completed: !completed
+        });
+        if(res.status == "200"){
+            console.log("okkk---")
+        }
+        else
+        {
+            console.log("something went wrong")
+        }
+        console.log("res", res)
+
     }
+
+    const handleTaskChange = (event) => {
+        setEditedTask(event.target.value);
+    };
+
 
     function handleChange(event) {
 
@@ -51,7 +83,9 @@ const done = props.completed
                     <Grid item xs={9} style={{textAlign:'left'}}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="edit-task">Edit Task</InputLabel>
-                            <Input id="edit-task" defaultValue={props.task} />
+                            <Input id="edit-task" defaultValue={props.task} onChange={
+                                handleTaskChange
+                            }  />
                             {/*<FormHelperText>Click outside the box to save changes</FormHelperText>*/}
                         </FormControl>
                     </Grid>

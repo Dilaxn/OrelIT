@@ -103,7 +103,7 @@ loadTasks()
                 {/*Here I map the all tasks with reusable component taskCard */}
 
                 {state &&  state.tasks.map((task, index) => (
-                    <TaskCard key={task.id} task={task.content} completed={task.completed}  onClick={() => handleClick(task.id)} onClick2={() => handleClick2(task.id)}/>
+                    <TaskCard key={task.id} id={task.id} task={task.content} completed={task.completed}  onClick={() => handleClick(task.id)} onClick2={() => handleClick2(task.id)}/>
                 ))}
 
 
