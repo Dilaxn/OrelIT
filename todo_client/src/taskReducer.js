@@ -29,11 +29,8 @@ const initialState = {
         case UPDATE_TASK:
             const updatedTasks = state.tasks.map((task) => {
                 if (task.id === action.payload.id) {
-                    console.log("-------", task)
-                    console.log("+++++", action.payload)
                     return { ...task, ...action.payload };
                 }
-                console.log("taskkkk", task)
                 return task;
             });
             return {

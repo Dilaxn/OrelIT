@@ -13,6 +13,7 @@ import {useDispatch} from "react-redux";
 import {LOAD_TASKS_SUCCESS, UPDATE_TASK} from "../actionTypes";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {BASE_URL} from "../Const";
 
 const updateSuccess = (payload) => ({ type: 'UPDATE_TASK', payload });
 
@@ -29,14 +30,10 @@ const done = props.completed
     const [id, setId] = useState(props.id);
 
     function handleEditClick() {
-        console.log("Edit clicked for task: ", props.task);
-        console.log("Task card clicked!", props.index);
         setEditIndex(props.index);
     }
 
     async function editFinished() {
-        console.log("Edit clicked for task: ", props.task);
-        console.log("Task card clicked!", props.index);
         setEditIndex(-1);
         const newTaskObject = {
             id: id,
@@ -44,7 +41,7 @@ const done = props.completed
             completed: completed
         };
 
-        const res = await axios.put('http://localhost:5000/api/task/' + props.id, {
+        const res = await axios.put(`${BASE_URL}/task/${props.id}`, {
             content: editedTask
         });
         if (res.status == "200") {
@@ -56,16 +53,19 @@ const done = props.completed
             });
             dispatch({type: UPDATE_TASK, payload: newTaskObject});
         } else {
-            console.log("something went wrong")
+            toast.error("Something went wrong!", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeButton: false,
+            });
         }
         // dispatch(addTask(newTaskObject));
         dispatch({type: UPDATE_TASK, payload: newTaskObject});
     }
 
     async function handleComplete() {
-        console.log("Edit clicked for task: ", props.task);
-        console.log("Task card clicked!", props.index);
-        const res = await axios.put('http://localhost:5000/api/task/'+props.id,{
+        const res = await axios.put(`${BASE_URL}/task/${props.id}`,{
             completed: !completed
         });
         if(res.status == "200"){
@@ -73,21 +73,19 @@ const done = props.completed
         }
         else
         {
-            console.log("something went wrong")
+            toast.error("Something went wrong!", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeButton: false,
+            });
         }
-        console.log("res", res)
 
     }
 
     const handleTaskChange = (event) => {
         setEditedTask(event.target.value);
     };
-
-
-    function handleChange(event) {
-
-        // console.log("selected event : ", event.target.value);
-    }
 
     return (
         <Card style={{marginTop:20}}>
@@ -101,7 +99,6 @@ const done = props.completed
                             <Input id="edit-task" defaultValue={props.task} onChange={
                                 handleTaskChange
                             }  />
-                            {/*<FormHelperText>Click outside the box to save changes</FormHelperText>*/}
                         </FormControl>
                     </Grid>
                         <Grid item xs={3}>

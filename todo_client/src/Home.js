@@ -17,6 +17,7 @@ import {
     getAllTasks,
 } from './Actions/taskActions';
 import axios from "axios";
+import { BASE_URL } from './Const.js';
 
 export default function Home(props) {
     const [taskCollection, setTaskCollection] = useState(data)
@@ -29,7 +30,7 @@ export default function Home(props) {
 
     const loadTasks = () => async (dispatch) => {
         try {
-            const res = await axios.get('http://localhost:5000/api/task');
+            const res = await axios.get(`${BASE_URL}/task`);
             dispatch(getAllTasks(res.data));
         } catch (e) {
             console.log('error');
@@ -40,9 +41,7 @@ export default function Home(props) {
     useEffect(() => {
         const getTasks = async () => {
             try {
-                console.log('okkk');
-                const res = await axios.get('http://localhost:5000/api/task');
-                console.log(res.data);
+                const res = await axios.get(`${BASE_URL}/task`);
                 dispatch(getAllTasks(res.data));
             } catch (e) {
                 console.log('error');
@@ -54,7 +53,7 @@ export default function Home(props) {
     async function handleClick(id) {
         const newTasks = taskCollection.tasks.filter((task) => task.id !== id);
         setTaskCollection({tasks: newTasks}); // update the task collection state
-        const res = await axios.delete('http://localhost:5000/api/task/' + id);
+        const res = await axios.delete(`${BASE_URL}/task/${id}`);
         if (res.status == "200") {
             toast.success("Successfully deleted!", {
                 position: toast.POSITION.TOP_CENTER,
@@ -82,9 +81,9 @@ export default function Home(props) {
             content: newTask,
             completed: 0
         };
-        const res = await axios.post('http://localhost:5000/api/task', newTaskObject);
-        if (res.status == "201") {
+        const res = await axios.post(`${BASE_URL}/task`, newTaskObject);
 
+        if (res.status == "201") {
             toast.success("Successfully created!", {
                 position: toast.POSITION.TOP_CENTER,
                 autoClose: 3000,
@@ -94,7 +93,12 @@ export default function Home(props) {
             dispatch(addTask(newTaskObject));
             setNewTask("")
         } else {
-            console.log("res cre", res)
+            toast.error("Something went wrong!", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeButton: false,
+            });
         }
 
     }
