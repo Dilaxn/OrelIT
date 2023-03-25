@@ -15,7 +15,8 @@ module.exports = (injectedDBHelper, InjectedMessages, injectedHelpers) => {
     //returning methods required for user maintenance
     return {
         _getTaskList: _getTaskList,
-        _createTask:_createTask
+        _createTask: _createTask,
+        _updateTask: _updateTask
     }
 }
 
@@ -65,7 +66,7 @@ async function _createTask(req, res) {
     let conn = await dbHelper._getConnection();
     try {
         //get the body data
-        let data = req.body.task
+        let data = req.body
 
 
         if (typeof data == null) {
@@ -73,9 +74,9 @@ async function _createTask(req, res) {
             return;
         }
 
-        //store resuls from db call
+        //store results from db call
         let result = null;
-        result = await dbHelper._createTask(data,conn);
+        result = await dbHelper._createTask(data, conn);
 
         //null result - no user found
         if (result.length == 0) {
@@ -92,3 +93,42 @@ async function _createTask(req, res) {
         return;
     }
 }
+
+//update a task
+async function _updateTask(req, res) {
+    //get messages from Message class
+    let messages = new Messages();
+    let conn = await dbHelper._getConnection();
+    try {
+        //get the body data
+        let data = req.body
+
+
+        if (data.content === "") {
+            res.status(400).send(messages.fail);
+            return;
+        }
+
+        data.t_id = req.params.t_id
+
+        //store results from db call
+        let result = null;
+        result = await dbHelper._updateTask(data, conn);
+
+        //null result - no user found
+        if (result.length == 0) {
+            res.status(200).send(messages.fail);
+            return;
+        }
+
+        //send result
+        res.status(200).send(result);
+    } catch (err) {
+        console.log('Error:', err);
+        //error result - user not found
+        res.status(200).send(messages.fail);
+        return;
+    }
+}
+
+

@@ -23,7 +23,8 @@ module.exports = (injectedMysqlConnection, injectedHelpers) => {
         _release: _release,
         _rollback: _rollback,
         _getTaskList: _getTaskList,
-        _createTask : _createTask
+        _createTask : _createTask,
+        _updateTask: _updateTask
     }
 }
 
@@ -126,6 +127,22 @@ function _createTask(data, dbconn) {
                 reject(error)
             resolve(result)
         })
+    });
+}
+
+//update task
+function _updateTask(data, dbconn) {
+    console.log(data)
+    //promise returns a result to await.
+    return new Promise((resolve, reject) => {
+        let queryString = `UPDATE task SET 
+            content = '` + data.content +  `' WHERE id = ` + data.t_id + `;`;
+
+        //execute the query
+        dbconn.query(queryString, function (err, result) {
+            if (err) reject(err);
+            resolve(result);
+        });
     });
 }
 
