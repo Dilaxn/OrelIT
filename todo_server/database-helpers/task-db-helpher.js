@@ -113,3 +113,19 @@ function _getTaskList() {
     });
 }
 
+//create task
+function _createTask(data, dbconn) {
+    console.log(data)
+    //promise returns a result to await.
+    return new Promise((resolve, reject) => {
+        console.log("2")
+        let queryString  = `INSERT INTO task SET ?`
+        console.log("3")
+        dbconn.query(queryString, data, (error, result) => {
+            if (error)
+                reject(error)
+            resolve(result)
+        })
+    });
+}
+
