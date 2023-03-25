@@ -28,6 +28,10 @@ const [taskCollection,setTaskCollection] = useState(data)
     const [newTask, setNewTask] = useState("");
     const state = useSelector((state) => state);
     console.log("store", state);
+    const currentDate = new Date();
+    const options = { weekday: 'long', day: 'numeric', month: 'short' };
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(currentDate);
+
 
     const dispatch = useDispatch();
 
@@ -105,12 +109,12 @@ loadTasks()
                 <Card >
                 <CardContent style={{textAlign:'center'}}>
                 <Typography gutterBottom variant="h3" component="div">
-                    Wednesday, 7th Nov
+                    {formattedDate}
                 </Typography>
                     </CardContent>
                 </Card>
                 <Typography gutterBottom variant="h6" component="div">
-                    3 tasks
+                    {state.tasks.length ? state.tasks.length : 0} tasks
                 </Typography>
 
                 {/*Here I map the all tasks with reusable component taskCard */}
