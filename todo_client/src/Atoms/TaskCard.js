@@ -12,6 +12,7 @@ import {addTask} from "../Actions/taskActions";
 import {useDispatch} from "react-redux";
 import {LOAD_TASKS_SUCCESS, UPDATE_TASK} from "../actionTypes";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const updateSuccess = (payload) => ({ type: 'UPDATE_TASK', payload });
 
@@ -47,7 +48,12 @@ const done = props.completed
             content: editedTask
         });
         if (res.status == "200") {
-            console.log("okkk---")
+            toast.success("Successfully updated!", {
+                position: toast.POSITION.TOP_CENTER,
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeButton: false,
+            });
             dispatch({type: UPDATE_TASK, payload: newTaskObject});
         } else {
             console.log("something went wrong")
@@ -63,7 +69,6 @@ const done = props.completed
             completed: !completed
         });
         if(res.status == "200"){
-            console.log("okkk---")
             setCompleted(!completed);
         }
         else
