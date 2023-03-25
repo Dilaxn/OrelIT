@@ -132,7 +132,7 @@ function _createTask(data, dbconn) {
 }
 
 //update task
-function _updateTask(data, dbconn) {
+function _updateTask(data) {
     console.log(data)
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
@@ -140,22 +140,25 @@ function _updateTask(data, dbconn) {
             content = '` + data.content +  `' WHERE id = ` + data.t_id + `;`;
 
         //execute the query
-        dbconn.query(queryString, function (err, result) {
+        mysqlConn.query(queryString, function (err, result) {
             if (err) reject(err);
+
             resolve(result);
         });
     });
 }
 
 //update task
-function _deleteTask(data, dbconn) {
+function _deleteTask(data) {
     console.log(data)
     //promise returns a result to await.
     return new Promise((resolve, reject) => {
         let queryString = `DELETE FROM task WHERE id=${data.t_id}`
 
-        dbconn.query(queryString, function (err, result) {
+        //execute the query
+        mysqlConn.query(queryString, function (err, result) {
             if (err) reject(err);
+
             resolve(result);
         });
     });

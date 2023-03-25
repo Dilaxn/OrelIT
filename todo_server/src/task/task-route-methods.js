@@ -74,19 +74,26 @@ async function _createTask(req, res) {
             res.status(400).send(messages.fail);
             return;
         }
-
+        const {error} = validateTask(data);
+        if (error) {
+            res.status(200).send(error.details[0].message);
+            return;
+        }
         //store results from db call
         let result = null;
         result = await dbHelper._createTask(data, conn);
 
         //null result - no user found
         if (result.length == 0) {
-            res.status(200).send(messages.fail);
+            res.status(200).send(messages.not_found);
             return;
         }
 
+        await dbHelper._commit(conn);
+
         //send result
         res.status(200).send(result);
+        return
     } catch (err) {
         console.log('Error:', err);
         //error result - user not found
@@ -99,14 +106,18 @@ async function _createTask(req, res) {
 async function _updateTask(req, res) {
     //get messages from Message class
     let messages = new Messages();
-    let conn = await dbHelper._getConnection();
     try {
         //get the body data
         let data = req.body
 
-
         if (data.content === "") {
             res.status(400).send(messages.fail);
+            return;
+        }
+
+        const {error} = validateTask(data);
+        if (error) {
+            res.status(200).send(error.details[0].message);
             return;
         }
 
@@ -114,7 +125,7 @@ async function _updateTask(req, res) {
 
         //store results from db call
         let result = null;
-        result = await dbHelper._updateTask(data, conn);
+        result = await dbHelper._updateTask(data);
 
         //null result - no user found
         if (result.length == 0) {
@@ -122,8 +133,14 @@ async function _updateTask(req, res) {
             return;
         }
 
+        if (result.affectedRows == 0) {
+            res.status(404).send(messages.not_found);
+            return;
+        }
+
         //send result
         res.status(200).send(result);
+        return
     } catch (err) {
         console.log('Error:', err);
         //error result - user not found
@@ -136,7 +153,6 @@ async function _updateTask(req, res) {
 async function _deleteTask(req, res) {
     //get messages from Message class
     let messages = new Messages();
-    let conn = await dbHelper._getConnection();
     try {
         //get the body data
         let data = {}
@@ -145,7 +161,7 @@ async function _deleteTask(req, res) {
 
         //store results from db call
         let result = null;
-        result = await dbHelper._deleteTask(data, conn);
+        result = await dbHelper._deleteTask(data);
 
         //null result - no user found
         if (result.length == 0) {
@@ -153,8 +169,13 @@ async function _deleteTask(req, res) {
             return;
         }
 
+        if (result.affectedRows == 0) {
+            res.status(404).send(messages.not_found);
+            return;
+        }
         //send result
         res.status(200).send(result);
+        return
     } catch (err) {
         console.log('Error:', err);
         //error result - user not found
@@ -163,3 +184,11 @@ async function _deleteTask(req, res) {
     }
 }
 
+//validate input
+function validateTask(attn) {
+    const schema = Joi.object({
+        content: Joi.string().required().label("Content")
+    });
+
+    return schema.validate(attn);
+}

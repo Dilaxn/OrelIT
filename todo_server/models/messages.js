@@ -9,6 +9,7 @@ class Messages {
     constructor() {
         this.success = "Success!";
         this.fail = "Fail!";
+        this.not_found = "Task Not Found!";
     }
 }
 
